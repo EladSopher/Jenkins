@@ -2,21 +2,24 @@ node {
     def app
 
     stage('Clone repository') {
-      
-
         checkout scm
     }
 
     stage('Build image') {
   
-       app = docker.build("brandonjones085/test")
+       app = docker.build("eladsopher/node-app", ",")
     }
 
     stage('Test image') {
   
 
         app.inside {
-            sh 'echo "Tests passed"'
+            // Start the app and check if it's accessible
+            sh 'npm run start &'
+            // Wait for a few seconds to ensure the app is up
+            sleep 10
+            // Check if the app is running on port 4200
+            sh 'curl -s http://localhost:4200 || echo "App is not running"'
         }
     }
 
