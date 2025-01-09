@@ -19,7 +19,7 @@ node {
             // Wait for a few seconds to ensure the app is up
             sleep 10
             // Check if the app is running on port 4200
-            sh 'curl -s http://localhost:4200 || echo "App is not running"'
+            sh 'curl -s http://3.227.22.106:4200 || echo "App is not running"'
         }
     }
 
