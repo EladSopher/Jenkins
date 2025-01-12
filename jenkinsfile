@@ -1,33 +1,23 @@
-node {
-    def app
-
-    stage('Clone repository') {
-        checkout scm
+pipeline {
+    agent any
+    options {
+        skipStagesAfterUnstable()
     }
-
-    stage('Build image') {
-  
-       app = docker.build("eladsopher/node-app", ",")
-    }
-
-    stage('Test image') {
-  
-
-        app.inside {
-            // Start the app and check if it's accessible
-            sh 'npm run start &'
-            // Wait for a few seconds to ensure the app is up
-            sleep 10
-            // Check if the app is running on port 4200
-            sh 'curl -s http://3.227.22.106:4200 || echo "App is not running"'
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building'
+            }
         }
-    }
-
-    stage('Push image') {
-        
-        docker.withRegistry('https://registry.hub.docker.com', 'git') {
-            app.push("${env.BUILD_NUMBER}")
-            app.push("latest")
+        stage('Test') {
+            steps {
+                echo 'Testing'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying'
+            }
         }
     }
 }
